@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-key */
+
 /* eslint-disable react/prop-types */
 import { format, formatDistanceToNow } from 'date-fns';
 import {ptBR} from 'date-fns/locale/pt-BR';
@@ -31,7 +31,20 @@ export function Post({author, publishedAt, content}) {
 
         function handleNewCommentChange() {
             setNewCommentText(event.target.value);
+            event.target.setCustomValidity('')
         }
+
+        function deleteComment(commentToDelete){
+            const commentsWithoutDeletedOne = comments.filter(comment => {
+                return comment !== commentToDelete
+            })
+            setComments(commentsWithoutDeletedOne)
+        }
+        function handleNewCommentInvalid(){
+            event.target.setCustomValidity('Esse campo é obrigatório!')
+        }
+
+        const isNewCommentEmpty = newCommentText.length === 0;
     return ( 
         <article className={styles.post}>
              <header>
@@ -64,14 +77,16 @@ export function Post({author, publishedAt, content}) {
                 value={newCommentText}
                 onChange={handleNewCommentChange}
                 placeholder="Deixe um comentário"
+                onInvalid={handleNewCommentInvalid}
+                required
                 />
                <footer>
-               <button type="submit">Publicar</button>
+               <button type="submit" disabled={isNewCommentEmpty}>Publicar</button>
                </footer>
              </form>
              <div className={styles.commentList}>
                {comments.map(comment => {
-                return <Comment content={comment}/>
+                return <Comment key={comment} content={comment} onDeleteComment={deleteComment}/>
                })}
              </div>
 
