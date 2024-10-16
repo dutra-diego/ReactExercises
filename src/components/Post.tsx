@@ -1,14 +1,26 @@
-
-/* eslint-disable react/prop-types */
 import { format, formatDistanceToNow } from 'date-fns';
 import {ptBR} from 'date-fns/locale/pt-BR';
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react';
+interface Author {
+    name: string;
+    role: string;
+    avatarUrl: string;
+}
+interface Content {
+    type: 'paragraph' | 'link';
+    content: string;
 
+}
+export interface PostProps {
+    author: Author;
+    publishedAt: Date;
+    content: Content[];
+}
 
-export function Post({author, publishedAt, content}) {
+export function Post({author, publishedAt, content} : PostProps) {
     const [comments, setComments] = useState([
        'Post muito bom, parabéns!'
 ])
@@ -21,7 +33,7 @@ export function Post({author, publishedAt, content}) {
         publishedAt, 
         {locale: ptBR, addSuffix: true});
 
-        function handleCreateNewComment() {
+        function handleCreateNewComment(event: FormEvent) {
             event.preventDefault();
 
             setComments([...comments, newCommentText])
@@ -29,18 +41,18 @@ export function Post({author, publishedAt, content}) {
         }
 
 
-        function handleNewCommentChange() {
+        function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>) {
             setNewCommentText(event.target.value);
             event.target.setCustomValidity('')
         }
 
-        function deleteComment(commentToDelete){
+        function deleteComment(commentToDelete: string){
             const commentsWithoutDeletedOne = comments.filter(comment => {
                 return comment !== commentToDelete
             })
             setComments(commentsWithoutDeletedOne)
         }
-        function handleNewCommentInvalid(){
+        function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>){
             event.target.setCustomValidity('Esse campo é obrigatório!')
         }
 

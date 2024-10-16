@@ -1,14 +1,15 @@
- 
-
 import { Header } from "./components/Header"
-import { Post } from "./components/Post"
+import { Post, PostProps } from "./components/Post"
 import styles from './App.module.css'
 import { Sidebar } from "./components/Sidebar"
 import './global.css'
-const posts = [{
+interface Post extends PostProps {
+  id: number;
+}
+const posts: Post[] = [{
   id: 1,
   author: {
-    avatar: 'https://www.github.com/dutra-diego.png',
+    avatarUrl: 'https://www.github.com/dutra-diego.png',
     name: 'Diego Dutra',
     role: 'Web Developer',
 
@@ -32,7 +33,7 @@ const posts = [{
 {
   id: 2,
   author: {
-    avatar: 'https://www.github.com/dutra-diego.png',
+    avatarUrl: 'https://www.github.com/dutra-diego.png',
     name: 'Kyoni Dutra',
     role: 'Dog',
 
